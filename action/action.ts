@@ -1,5 +1,7 @@
 "use server"
+import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
+import * as z from "zod/v4"
 
 export interface State {
   message: string
@@ -42,9 +44,15 @@ export const login = async (prevState: State, formData: FormData) => {
   return { message: "Successfully Created", errorMessage: "" }
 }
 export const createLead = async (prevState: State, formData: FormData) => {
-  console.log("Here I am ")
-  await new Promise((resolve) => setTimeout(resolve, 3000))
-  return { message: "Successfully Created", errorMessage: "" }
+  try {
+    validateLead(formData)
+    return { message: "Successfully Created", errorMessage: "" }
+  } catch (error: any) {
+    if (error instanceof z.ZodError) {
+      return { message: "", errorMessage: error.issues[0].message }
+    }
+    return { message: "", errorMessage: error.message }
+  }
 }
 export const getLeads = async () => {}
 export const getLead = async () => {}
