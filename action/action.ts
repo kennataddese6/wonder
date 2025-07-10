@@ -1,11 +1,11 @@
 "use server"
+import { db } from "@/src"
 import { leadsTable } from "@/src/db/schema"
 import { insertLead } from "@/utils/db-actions"
 import handleCreateLeadError from "@/utils/error-handlers"
 import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
 import { desc } from "drizzle-orm"
-import { drizzle } from "drizzle-orm/node-postgres"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 
@@ -13,7 +13,6 @@ export interface State {
   message: string
   errorMessage: string
 }
-const db = drizzle(process.env.DATABASE_URL!)
 
 export const generateColdEmail = async (
   prevState: State,

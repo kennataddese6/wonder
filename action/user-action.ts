@@ -1,11 +1,9 @@
 "use server"
+import { db } from "@/src"
 import { usersTable } from "@/src/db/schema"
 import "dotenv/config"
 import { eq } from "drizzle-orm"
-import { drizzle } from "drizzle-orm/node-postgres"
 import { State } from "./action"
-
-const db = drizzle(process.env.DATABASE_URL!)
 
 export async function createUser(prevState: State, formData: FormData) {
   const user: typeof usersTable.$inferInsert = {
