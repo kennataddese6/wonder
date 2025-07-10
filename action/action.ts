@@ -1,12 +1,18 @@
 "use server"
+import { leadsTable } from "@/src/db/schema"
+import { insertLead } from "@/utils/db-actions"
+import handleCreateLeadError from "@/utils/error-handlers"
 import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
-import * as z from "zod/v4"
+import { desc } from "drizzle-orm"
+import { drizzle } from "drizzle-orm/node-postgres"
+import { revalidatePath } from "next/cache"
 
 export interface State {
   message: string
   errorMessage: string
 }
+const db = drizzle(process.env.DATABASE_URL!)
 
 export const generateColdEmail = async (
   prevState: State,
@@ -43,18 +49,26 @@ export const login = async (prevState: State, formData: FormData) => {
   // await new Promise((resolve) => setTimeout(resolve, 3000))
   return { message: "Successfully Created", errorMessage: "" }
 }
+
 export const createLead = async (prevState: State, formData: FormData) => {
   try {
-    validateLead(formData)
+    const lead = validateLead(formData)
+    await insertLead(lead)
+    revalidatePath("/ma/leads")
     return { message: "Successfully Created", errorMessage: "" }
   } catch (error: any) {
-    if (error instanceof z.ZodError) {
-      return { message: "", errorMessage: error.issues[0].message }
-    }
-    return { message: "", errorMessage: error.message }
+    return handleCreateLeadError(error)
   }
 }
-export const getLeads = async () => {}
+
+export const getLeads = async () => {
+  const leads = await db
+    .select()
+    .from(leadsTable)
+    .orderBy(desc(leadsTable.createdAt))
+  return leads
+}
+
 export const getLead = async () => {}
 export const updateLead = async () => {}
 export const deleteLead = async () => {}
