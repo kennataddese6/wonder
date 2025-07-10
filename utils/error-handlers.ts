@@ -7,5 +7,5 @@ export default function handleCreateLeadError(error: any) {
   if (error?.cause?.code === "23505") {
     return { message: "", errorMessage: "Email already exists" }
   }
-  return { message: "", errorMessage: "Something went wrong" }
+  return { message: "", errorMessage: error.message }
 }

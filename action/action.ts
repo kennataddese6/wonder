@@ -7,6 +7,7 @@ import { CohereClientV2 } from "cohere-ai"
 import { desc } from "drizzle-orm"
 import { drizzle } from "drizzle-orm/node-postgres"
 import { revalidatePath } from "next/cache"
+import { headers } from "next/headers"
 
 export interface State {
   message: string
@@ -51,6 +52,7 @@ export const login = async (prevState: State, formData: FormData) => {
 }
 
 export const createLead = async (prevState: State, formData: FormData) => {
+  await headers()
   try {
     const lead = validateLead(formData)
     await insertLead(lead)
@@ -62,6 +64,7 @@ export const createLead = async (prevState: State, formData: FormData) => {
 }
 
 export const getLeads = async () => {
+  await headers()
   const leads = await db
     .select()
     .from(leadsTable)
