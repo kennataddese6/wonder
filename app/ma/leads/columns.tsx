@@ -8,24 +8,24 @@ export type Lead = {
   id: number
   email: string
   description: string
-  status: "new" | "sent" | "followed_up" | "failed" | "deleted" | "converted" | null
+  status: "New" | "Sent" | "Followed Up" | "Failed" | "Deleted" | "Converted" | null
   createdAt: Date
   updatedAt: Date
 }
 
 const getStatusColor = (status: string) => {
   switch (status) {
-    case "new":
+    case "New":
       return "bg-blue-500 text-white hover:bg-blue-600"
-    case "sent":
+    case "Sent":
       return "bg-green-500 text-white hover:bg-green-600"
-    case "followed_up":
+    case "Followed Up":
       return "bg-yellow-500 text-white hover:bg-yellow-600"
-    case "failed":
+    case "Failed":
       return "bg-red-500 text-white hover:bg-red-600"
-    case "deleted":
+    case "Deleted":
       return "bg-gray-500 text-white hover:bg-gray-600"
-    case "converted":
+    case "Converted":
       return "bg-purple-500 text-white hover:bg-purple-600"
     default:
       return "bg-gray-500 text-white hover:bg-gray-600"
@@ -48,8 +48,8 @@ export const columns: ColumnDef<Lead>[] = [
       const status = row.getValue("status") as string | null
       if (!status) {
         return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500 text-white">
-            new
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500 text-white">
+            New
           </span>
         )
       }

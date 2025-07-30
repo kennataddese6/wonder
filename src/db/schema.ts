@@ -8,19 +8,19 @@ export const usersTable = pgTable("users", {
 })
 
 export const leadsStatusEnum = pgEnum("status", [
-  "new",
-  "sent",
-  "followed_up",
-  "failed",
-  "deleted",
-  "converted",
+  "New",
+  "Sent",
+  "Followed Up",
+  "Failed",
+  "Deleted",
+  "Converted",
 ])
 
 export const leadsTable = pgTable("leads", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   email: varchar({ length: 255 }).notNull().unique(),
   description: varchar({ length: 255 }).notNull(),
-  status: leadsStatusEnum("status").default("new"),
+  status: leadsStatusEnum("status").default("New"),
   createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp({ mode: "date" }).defaultNow().notNull(),
 })
