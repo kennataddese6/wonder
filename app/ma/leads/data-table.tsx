@@ -1,26 +1,27 @@
 "use client"
 
 import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable,
+    ColumnDef,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    useReactTable,
 } from "@tanstack/react-table"
 
 import { deleteLeads } from "@/action/action"
 import { Button } from "@/components/ui/button"
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
 import { toast } from "sonner"
+import { Lead } from "./columns"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -51,7 +52,7 @@ export function DataTable<TData, TValue>({
 
     setIsDeleting(true)
     try {
-      const leadIds = selectedRows.map(row => (row.original as any).id)
+      const leadIds = selectedRows.map(row => (row.original as Lead).id)
       const result = await deleteLeads(leadIds)
       
       if (result.errorMessage) {
@@ -60,7 +61,7 @@ export function DataTable<TData, TValue>({
         toast.success(result.message)
         table.toggleAllPageRowsSelected(false)
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to delete leads")
     } finally {
       setIsDeleting(false)
