@@ -19,4 +19,8 @@ export const columns: ColumnDef<Lead>[] = [
     accessorKey: "description",
     header: "Description",
   },
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
 ]
