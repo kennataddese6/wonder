@@ -15,6 +15,7 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true)
     try {
+      console.log('Starting Google sign in...')
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -22,12 +23,17 @@ export default function LoginPage() {
         }
       })
 
+      console.log('OAuth response:', { data, error })
+
       if (error) {
+        console.error('OAuth error:', error)
         toast.error(error.message)
       } else {
+        console.log('OAuth successful, redirecting...')
         toast.success("Redirecting to Google...")
       }
     } catch (error) {
+      console.error('Sign in error:', error)
       toast.error("Failed to sign in with Google")
     } finally {
       setIsLoading(false)

@@ -37,16 +37,19 @@ export async function GET(request: Request) {
       console.error('Auth callback error:', error)
       return NextResponse.redirect(requestUrl.origin + '/login?error=auth_failed')
     }
+
+    // Create response with proper cookies
+    const response = NextResponse.redirect(requestUrl.origin + '/ma')
+    
+    // Copy cookies from cookieStore to response
+    const allCookies = cookieStore.getAll()
+    allCookies.forEach(cookie => {
+      response.cookies.set(cookie.name, cookie.value, cookie)
+    })
+    
+    return response
   }
 
-  // Create response with proper cookies
-  const response = NextResponse.redirect(requestUrl.origin + '/ma')
-  
-  // Copy cookies from cookieStore to response
-  const allCookies = await cookies()
-  allCookies.getAll().forEach(cookie => {
-    response.cookies.set(cookie.name, cookie.value, cookie)
-  })
-  
-  return response
+  // If no code, redirect to login
+  return NextResponse.redirect(requestUrl.origin + '/login')
 } 
