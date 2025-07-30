@@ -35,14 +35,18 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  console.log('Middleware - Path:', request.nextUrl.pathname, 'User:', user ? 'Authenticated' : 'Not authenticated')
+
   // If there's no user and the user is trying to access a protected route
   if (!user && request.nextUrl.pathname.startsWith('/ma')) {
+    console.log('Middleware - Redirecting to login (no user)')
     const redirectUrl = new URL('/login', request.url)
     return NextResponse.redirect(redirectUrl)
   }
 
   // If there's a user and they're trying to access auth pages, redirect to dashboard
   if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup')) {
+    console.log('Middleware - Redirecting to dashboard (user authenticated)')
     const redirectUrl = new URL('/ma', request.url)
     return NextResponse.redirect(redirectUrl)
   }
@@ -58,8 +62,10 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - auth/callback (OAuth callback)
+     * - debug (debug pages)
+     * - test-env (test pages)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|auth/callback|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|auth/callback|debug|test-env|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 } 

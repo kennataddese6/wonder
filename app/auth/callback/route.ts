@@ -6,6 +6,8 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
+  console.log('Auth callback - Code present:', !!code)
+
   if (code) {
     const cookieStore = await cookies()
     const supabase = createServerClient(
@@ -33,6 +35,8 @@ export async function GET(request: Request) {
     
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     
+    console.log('Auth callback - Exchange result:', { hasData: !!data, error: error?.message })
+    
     if (error) {
       console.error('Auth callback error:', error)
       return NextResponse.redirect(requestUrl.origin + '/login?error=auth_failed')
@@ -43,10 +47,13 @@ export async function GET(request: Request) {
     
     // Copy cookies from cookieStore to response
     const allCookies = cookieStore.getAll()
+    console.log('Auth callback - Cookies to set:', allCookies.length)
     allCookies.forEach(cookie => {
+      console.log('Auth callback - Setting cookie:', cookie.name)
       response.cookies.set(cookie.name, cookie.value, cookie)
     })
     
+    console.log('Auth callback - Redirecting to /ma')
     return response
   }
 
