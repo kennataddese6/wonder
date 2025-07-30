@@ -45,7 +45,6 @@ export const generateColdEmail = async (
 }
 
 export const login = async (prevState: State, formData: FormData) => {
-  console.log("Here I am ")
   // await new Promise((resolve) => setTimeout(resolve, 3000))
   return { message: "Successfully Created", errorMessage: "" }
 }
