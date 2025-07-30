@@ -31,7 +31,6 @@ export async function updateUser() {
       password: "Whereareyou",
     })
     .where(eq(usersTable.email, "kennataddese6@gmail.com"))
-  console.log("User info updated!")
 }
 
 export async function getUsers() {
@@ -43,5 +42,4 @@ export async function deleteUser() {
   await db
     .delete(usersTable)
     .where(eq(usersTable.email, "kennataddese6@gmail.com"))
-  console.log("User deleted!")
 }
