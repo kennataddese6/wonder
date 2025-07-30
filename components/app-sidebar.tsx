@@ -1,4 +1,9 @@
-import { Home, Inbox, Settings } from "lucide-react"
+"use client"
+
+import { supabase } from "@/lib/supabase"
+import { Home, Inbox, LogOut } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
 import {
     Sidebar,
@@ -24,14 +29,25 @@ const items = [
     url: "/ma/leads",
     icon: Inbox,
   },
-  {
-    title: "Logout",
-    url: "/login",
-    icon: Settings,
-  },
 ]
 
 export function AppSidebar() {
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        toast.error("Failed to sign out")
+      } else {
+        toast.success("Signed out successfully")
+        router.push("/login")
+      }
+    } catch (error) {
+      toast.error("Failed to sign out")
+    }
+  }
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -49,6 +65,19 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton onClick={handleLogout}>
+                  <LogOut />
+                  <span>Logout</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

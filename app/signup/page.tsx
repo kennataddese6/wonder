@@ -8,11 +8,11 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignUp = async () => {
     setIsLoading(true)
     try {
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -28,7 +28,7 @@ export default function LoginPage() {
         toast.success("Redirecting to Google...")
       }
     } catch (error) {
-      toast.error("Failed to sign in with Google")
+      toast.error("Failed to sign up with Google")
     } finally {
       setIsLoading(false)
     }
@@ -39,23 +39,23 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            Welcome back
+            Create your account
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Sign in to your Wonder account
+            Join Wonder and start managing your leads
           </p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Sign in</CardTitle>
+            <CardTitle className="text-2xl text-center">Sign up</CardTitle>
             <CardDescription className="text-center">
-              Choose your preferred sign in method
+              Choose your preferred sign up method
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <Button
-              onClick={handleGoogleSignIn}
+              onClick={handleGoogleSignUp}
               disabled={isLoading}
               className="w-full"
               variant="outline"
@@ -63,7 +63,7 @@ export default function LoginPage() {
               {isLoading ? (
                 <div className="flex items-center space-x-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-900"></div>
-                  <span>Signing in...</span>
+                  <span>Signing up...</span>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
@@ -100,9 +100,9 @@ export default function LoginPage() {
             </div>
 
             <div className="text-center text-sm">
-              Don't have an account?{" "}
-              <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
-                Sign up
+              Already have an account?{" "}
+              <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                Sign in
               </Link>
             </div>
           </CardContent>
@@ -110,4 +110,4 @@ export default function LoginPage() {
       </div>
     </div>
   )
-}
+} 
