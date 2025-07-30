@@ -24,7 +24,7 @@ const getStatusColor = (status: string) => {
     case "Failed":
       return "bg-red-500 text-white hover:bg-red-600"
     case "Deleted":
-      return "bg-gray-500 text-white hover:bg-gray-600"
+      return "bg-red-500 text-white hover:bg-red-600"
     case "Converted":
       return "bg-purple-500 text-white hover:bg-purple-600"
     default:
