@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import LeadsContent from "./leads-content"
+import LeadsContent from "../leads-content"
 
-export default function Page() {
+export default function DeletedLeadsPage() {
   return (
     <Suspense fallback={<Loading />}>
-      <LeadsContent />
+      <LeadsContent statusFilter="Deleted" />
     </Suspense>
   )
 }
@@ -52,4 +52,4 @@ function Loading() {
       </div>
     </div>
   )
-}
+} 

@@ -3,11 +3,20 @@ import { CreateLead } from "@/components/molecules/create-lead"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
 
-export default async function LeadsContent() {
-  const data = await getLeads()
+interface LeadsContentProps {
+  statusFilter?: string
+}
+
+export default async function LeadsContent({ statusFilter }: LeadsContentProps) {
+  const allData = await getLeads()
   
+  // Filter data based on status if provided
+  const data = statusFilter 
+    ? allData.filter(lead => lead.status === statusFilter)
+    : allData
+
   return (
-    <div className="container mx-auto py-10 px-24">
+    <div>
       <CreateLead />
       <DataTable columns={columns} data={data} />
     </div>

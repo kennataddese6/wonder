@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import LeadsContent from "./leads-content"
+import LeadsContent from "../leads-content"
 
-export default function Page() {
+export default function ConvertedLeadsPage() {
   return (
     <Suspense fallback={<Loading />}>
-      <LeadsContent />
+      <LeadsContent statusFilter="Converted" />
     </Suspense>
   )
 }
@@ -52,4 +52,4 @@ function Loading() {
       </div>
     </div>
   )
-}
+} 
