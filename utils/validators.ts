@@ -7,5 +7,5 @@ export const Lead = z.object({
     .refine((val) => /\S+@\S+\.\S+/.test(val), {
       message: "Invalid email address",
     }),
-  description: z.string().min(1, "Description is required"),
+  description: z.string().min(1, "Description is required").max(255, "Description must be 255 characters or less"),
 })
