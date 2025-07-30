@@ -16,6 +16,8 @@ export default function LoginPage() {
     setIsLoading(true)
     try {
       console.log('Starting Google sign in...')
+      console.log('Redirect URL:', `${window.location.origin}/auth/callback`)
+      
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -24,6 +26,9 @@ export default function LoginPage() {
       })
 
       console.log('OAuth response:', { data, error })
+      if (data?.url) {
+        console.log('OAuth URL:', data.url)
+      }
 
       if (error) {
         console.error('OAuth error:', error)

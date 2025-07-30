@@ -5,8 +5,13 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const error = requestUrl.searchParams.get('error')
+  const errorDescription = requestUrl.searchParams.get('error_description')
 
+  console.log('Auth callback - Full URL:', request.url)
   console.log('Auth callback - Code present:', !!code)
+  console.log('Auth callback - Error:', error)
+  console.log('Auth callback - Error description:', errorDescription)
 
   if (code) {
     const cookieStore = await cookies()
