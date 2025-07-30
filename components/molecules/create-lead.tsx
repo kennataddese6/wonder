@@ -2,20 +2,22 @@
 import { createLead, State } from "@/action/action"
 import { Button } from "@/components/ui/button"
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useActionState, useEffect } from "react"
+import { useActionState, useEffect, useState } from "react"
 import { toast } from "sonner"
+
 export function CreateLead() {
+  const [open, setOpen] = useState(false)
   const initialState: State = {
     message: "",
     errorMessage: "",
@@ -31,11 +33,13 @@ export function CreateLead() {
       toast.error(state.errorMessage)
     } else if (state.message) {
       toast.success(state.message)
+      // Close the dialog when lead is successfully created
+      setOpen(false)
     }
   }, [state])
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="my-5 block ml-auto">
           Create Lead
