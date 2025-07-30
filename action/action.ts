@@ -5,7 +5,7 @@ import { insertLead } from "@/utils/db-actions"
 import handleCreateLeadError from "@/utils/error-handlers"
 import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
-import { desc } from "drizzle-orm"
+import { desc, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 import { headers } from "next/headers"
 
@@ -68,6 +68,31 @@ export const getLeads = async () => {
     .from(leadsTable)
     .orderBy(desc(leadsTable.createdAt))
   return leads
+}
+
+export const deleteLeads = async (leadIds: number[]) => {
+  await headers()
+  try {
+    if (leadIds.length === 0) {
+      return { message: "", errorMessage: "No leads selected" }
+    }
+
+    await db
+      .update(leadsTable)
+      .set({ 
+        status: "Deleted",
+        updatedAt: new Date()
+      })
+      .where(inArray(leadsTable.id, leadIds))
+
+    revalidatePath("/ma/leads")
+    return { 
+      message: `Successfully deleted ${leadIds.length} lead(s)`, 
+      errorMessage: "" 
+    }
+  } catch (error: any) {
+    return { message: "", errorMessage: "Failed to delete leads" }
+  }
 }
 
 export const getLead = async () => {}
