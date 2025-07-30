@@ -64,8 +64,9 @@ export const config = {
      * - auth/callback (OAuth callback)
      * - debug (debug pages)
      * - test-env (test pages)
+     * - test-oauth (OAuth test page)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|auth/callback|debug|test-env|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|auth/callback|debug|test-env|test-oauth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 } 
