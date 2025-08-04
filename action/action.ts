@@ -5,7 +5,7 @@ import { insertLead } from "@/utils/db-actions"
 import handleCreateLeadError from "@/utils/error-handlers"
 import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
-import { desc, inArray } from "drizzle-orm"
+import { desc, eq, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 export interface State {
@@ -59,11 +59,14 @@ export const createLead = async (prevState: State, formData: FormData) => {
   }
 }
 
-export const getLeads = async () => {
-  const leads = await db
-    .select()
-    .from(leadsTable)
-    .orderBy(desc(leadsTable.createdAt))
+export const getLeads = async (status?: string) => {
+  let query = db.select().from(leadsTable).orderBy(desc(leadsTable.createdAt))
+
+  if (status) {
+    query = query.where(eq(leadsTable.status, status))
+  }
+
+  const leads = await query
   return leads
 }
 

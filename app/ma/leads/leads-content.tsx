@@ -7,13 +7,10 @@ interface LeadsContentProps {
   statusFilter?: string
 }
 
-export default async function LeadsContent({ statusFilter }: LeadsContentProps) {
-  const allData = await getLeads()
-  
-  // Filter data based on status if provided
-  const data = statusFilter 
-    ? allData.filter(lead => lead.status === statusFilter)
-    : allData
+export default async function LeadsContent({
+  statusFilter,
+}: LeadsContentProps) {
+  const data = await getLeads(statusFilter)
 
   return (
     <div>
@@ -21,4 +18,4 @@ export default async function LeadsContent({ statusFilter }: LeadsContentProps) 
       <DataTable columns={columns} data={data} />
     </div>
   )
-} 
+}
