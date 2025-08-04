@@ -7,7 +7,6 @@ import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
 import { desc, inArray } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
-import { headers } from "next/headers"
 
 export interface State {
   message: string
@@ -50,7 +49,6 @@ export const login = async (prevState: State, formData: FormData) => {
 }
 
 export const createLead = async (prevState: State, formData: FormData) => {
-  await headers()
   try {
     const lead = validateLead(formData)
     await insertLead(lead)
@@ -62,7 +60,6 @@ export const createLead = async (prevState: State, formData: FormData) => {
 }
 
 export const getLeads = async () => {
-  await headers()
   const leads = await db
     .select()
     .from(leadsTable)
@@ -71,7 +68,6 @@ export const getLeads = async () => {
 }
 
 export const deleteLeads = async (leadIds: number[]) => {
-  await headers()
   try {
     if (leadIds.length === 0) {
       return { message: "", errorMessage: "No leads selected" }
@@ -79,16 +75,16 @@ export const deleteLeads = async (leadIds: number[]) => {
 
     await db
       .update(leadsTable)
-      .set({ 
+      .set({
         status: "Deleted",
-        updatedAt: new Date()
+        updatedAt: new Date(),
       })
       .where(inArray(leadsTable.id, leadIds))
 
     revalidatePath("/ma/leads")
-    return { 
-      message: `Successfully deleted ${leadIds.length} lead(s)`, 
-      errorMessage: "" 
+    return {
+      message: `Successfully deleted ${leadIds.length} lead(s)`,
+      errorMessage: "",
     }
   } catch (error: any) {
     return { message: "", errorMessage: "Failed to delete leads" }
