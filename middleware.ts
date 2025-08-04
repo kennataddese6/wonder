@@ -1,5 +1,5 @@
-import { createServerClient } from '@supabase/ssr'
-import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from "@supabase/ssr"
+import { NextResponse, type NextRequest } from "next/server"
 
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -15,16 +15,18 @@ export async function middleware(request: NextRequest) {
           return request.cookies.getAll()
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+          cookiesToSet.forEach(({ name, value, options }) =>
+            request.cookies.set(name, value),
+          )
           supabaseResponse = NextResponse.next({
             request,
           })
           cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
+            supabaseResponse.cookies.set(name, value, options),
           )
         },
       },
-    }
+    },
   )
 
   // IMPORTANT: Avoid writing any logic between createServerClient and
@@ -35,19 +37,28 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  console.log('Middleware - Path:', request.nextUrl.pathname, 'User:', user ? 'Authenticated' : 'Not authenticated')
+  console.log(
+    "Middleware - Path:",
+    request.nextUrl.pathname,
+    "User:",
+    user ? "Authenticated" : "Not authenticated",
+  )
 
   // If there's no user and the user is trying to access a protected route
-  if (!user && request.nextUrl.pathname.startsWith('/ma')) {
+  /*   if (!user && request.nextUrl.pathname.startsWith('/ma')) {
     console.log('Middleware - Redirecting to login (no user)')
     const redirectUrl = new URL('/login', request.url)
     return NextResponse.redirect(redirectUrl)
-  }
+  } */
 
   // If there's a user and they're trying to access auth pages, redirect to dashboard
-  if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup')) {
-    console.log('Middleware - Redirecting to dashboard (user authenticated)')
-    const redirectUrl = new URL('/ma', request.url)
+  if (
+    user &&
+    (request.nextUrl.pathname === "/login" ||
+      request.nextUrl.pathname === "/signup")
+  ) {
+    console.log("Middleware - Redirecting to dashboard (user authenticated)")
+    const redirectUrl = new URL("/ma", request.url)
     return NextResponse.redirect(redirectUrl)
   }
 
@@ -67,6 +78,6 @@ export const config = {
      * - test-oauth (OAuth test page)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|auth/callback|debug|test-env|test-oauth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    "/((?!_next/static|_next/image|favicon.ico|auth/callback|debug|test-env|test-oauth|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
-} 
+}
