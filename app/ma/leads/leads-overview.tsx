@@ -21,7 +21,7 @@ export default async function LeadsOverview() {
           <CardTitle className="text-2xl font-bold">Lead Overview</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-gray-900">
+          <div className="text-3xl font-bold text-gray-200">
             {stats.total} Total Leads
           </div>
         </CardContent>
