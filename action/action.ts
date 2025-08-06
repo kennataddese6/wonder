@@ -163,3 +163,26 @@ export const getLeadStats = async () => {
     }
   }
 }
+
+export const getDailyLeadStats = async () => {
+  try {
+    // Get lead counts for the last 30 days
+    const dailyStats = await db
+      .select({
+        date: sql`DATE(${leadsTable.createdAt})`,
+        count: sql`count(*)`,
+      })
+      .from(leadsTable)
+      .where(sql`${leadsTable.createdAt} >= NOW() - INTERVAL '30 days'`)
+      .groupBy(sql`DATE(${leadsTable.createdAt})`)
+      .orderBy(sql`DATE(${leadsTable.createdAt})`)
+
+    return dailyStats.map((stat) => ({
+      date: stat.date,
+      leads: Number(stat.count),
+    }))
+  } catch (error) {
+    console.error("Error fetching daily lead stats:", error)
+    return []
+  }
+}
