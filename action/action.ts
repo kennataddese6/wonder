@@ -59,15 +59,46 @@ export const createLead = async (prevState: State, formData: FormData) => {
   }
 }
 
-export const getLeads = async (status?: string) => {
-  let query = db.select().from(leadsTable).orderBy(desc(leadsTable.createdAt))
+export interface GetLeadsOptions {
+  status?: string
+  page?: number
+  pageSize?: number
+  search?: string
+}
 
-  if (status) {
-    query = query.where(eq(leadsTable.status, status))
+export const getLeads = async (options: GetLeadsOptions = {}) => {
+  const { status, page = 1, pageSize = 10, search } = options
+  let whereClauses = []
+
+  if (status && status !== "all") {
+    whereClauses.push(eq(leadsTable.status, status))
   }
 
-  const leads = await query
-  return leads
+  if (search) {
+    // Search in email or description (case-insensitive)
+    const searchTerm = `%${search}%`
+    whereClauses.push(
+      sql`${leadsTable.email} ILIKE ${searchTerm} OR ${leadsTable.description} ILIKE ${searchTerm}`,
+    )
+  }
+
+  // Count total for pagination
+  const totalResult = await db
+    .select({ count: sql`count(*)` })
+    .from(leadsTable)
+    .where(whereClauses.length ? sql.join(whereClauses, sql` AND `) : undefined)
+  const total = Number(totalResult[0]?.count || 0)
+
+  // Fetch paginated leads
+  const leads = await db
+    .select()
+    .from(leadsTable)
+    .where(whereClauses.length ? sql.join(whereClauses, sql` AND `) : undefined)
+    .orderBy(desc(leadsTable.createdAt))
+    .limit(pageSize)
+    .offset((page - 1) * pageSize)
+
+  return { leads, total }
 }
 
 export const deleteLeads = async (leadIds: number[]) => {
