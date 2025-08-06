@@ -5,7 +5,7 @@ import { insertLead } from "@/utils/db-actions"
 import handleCreateLeadError from "@/utils/error-handlers"
 import { validateLead } from "@/utils/validations"
 import { CohereClientV2 } from "cohere-ai"
-import { desc, eq, inArray } from "drizzle-orm"
+import { desc, eq, inArray, sql } from "drizzle-orm"
 import { revalidatePath } from "next/cache"
 
 export interface State {
@@ -97,3 +97,38 @@ export const deleteLeads = async (leadIds: number[]) => {
 export const getLead = async () => {}
 export const updateLead = async () => {}
 export const deleteLead = async () => {}
+
+export const getLeadStats = async () => {
+  try {
+    // Get total count
+    const totalResult = await db
+      .select({ count: sql`count(*)` })
+      .from(leadsTable)
+
+    // Get count by status
+    const statusCounts = await db
+      .select({
+        status: leadsTable.status,
+        count: sql`count(*)`,
+      })
+      .from(leadsTable)
+      .groupBy(leadsTable.status)
+
+    const total = totalResult[0]?.count || 0
+    const statusStats = statusCounts.reduce((acc, item) => {
+      acc[item.status] = Number(item.count)
+      return acc
+    }, {} as Record<string, number>)
+
+    return {
+      total,
+      statusStats,
+    }
+  } catch (error) {
+    console.error("Error fetching lead stats:", error)
+    return {
+      total: 0,
+      statusStats: {},
+    }
+  }
+}
