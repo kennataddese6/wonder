@@ -1,0 +1,1 @@
+ALTER TABLE "cron" ALTER COLUMN "status" SET DEFAULT 'paused';

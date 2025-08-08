@@ -1,0 +1,1 @@
+ALTER TABLE "cron" ADD COLUMN "status" "status" DEFAULT 'stopped';

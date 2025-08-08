@@ -1,4 +1,10 @@
-import { integer, pgEnum, pgTable, timestamp, varchar } from "drizzle-orm/pg-core"
+import {
+  integer,
+  pgEnum,
+  pgTable,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core"
 
 export const usersTable = pgTable("users", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -21,6 +27,16 @@ export const leadsTable = pgTable("leads", {
   email: varchar({ length: 255 }).notNull().unique(),
   description: varchar({ length: 255 }).notNull(),
   status: leadsStatusEnum("status").default("New"),
+  createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
+  updatedAt: timestamp({ mode: "date" }).defaultNow().notNull(),
+})
+
+export const cronStatusEnum = pgEnum("cron_status", ["running", "paused"])
+
+export const cronTable = pgTable("cron", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  index: integer().default(0),
+  cron_status: cronStatusEnum("cron_status").default("paused"),
   createdAt: timestamp({ mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp({ mode: "date" }).defaultNow().notNull(),
 })
