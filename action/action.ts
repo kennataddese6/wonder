@@ -60,18 +60,29 @@ export const createLead = async (prevState: State, formData: FormData) => {
 }
 
 export interface GetLeadsOptions {
-  status?: string
+  status: string
   page?: number
   pageSize?: number
   search?: string
 }
 
-export const getLeads = async (options: GetLeadsOptions = {}) => {
+export const getLeads = async (options: GetLeadsOptions) => {
   const { status, page = 1, pageSize = 10, search } = options
   let whereClauses = []
 
   if (status && status !== "all") {
-    whereClauses.push(eq(leadsTable.status, status))
+    whereClauses.push(
+      eq(
+        leadsTable.status,
+        status as
+          | "New"
+          | "Sent"
+          | "Followed Up"
+          | "Failed"
+          | "Deleted"
+          | "Converted",
+      ),
+    )
   }
 
   if (search) {
@@ -146,7 +157,7 @@ export const getLeadStats = async () => {
       .groupBy(leadsTable.status)
 
     const total = totalResult[0]?.count || 0
-    const statusStats = statusCounts.reduce((acc, item) => {
+    const statusStats = statusCounts.reduce((acc: any, item: any) => {
       acc[item.status] = Number(item.count)
       return acc
     }, {} as Record<string, number>)
