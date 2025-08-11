@@ -4,7 +4,7 @@ import LeadsContent from "../leads-content"
 export default function DeletedLeadsPage() {
   return (
     <Suspense fallback={<Loading />}>
-      <LeadsContent statusFilter="Deleted" />
+      <LeadsContent status="Deleted" />
     </Suspense>
   )
 }
@@ -16,7 +16,7 @@ function Loading() {
       <div className="my-5 flex justify-end">
         <div className="h-10 w-32 bg-gray-200 animate-pulse rounded" />
       </div>
-      
+
       {/* Table Skeleton */}
       <div className="rounded-md border">
         <div className="border-b">
@@ -33,7 +33,7 @@ function Loading() {
             </div>
           </div>
         </div>
-        
+
         {/* Table Rows Skeleton */}
         {Array.from({ length: 5 }).map((_, index) => (
           <div key={index} className="flex h-16 items-center px-4 border-b">
@@ -52,4 +52,4 @@ function Loading() {
       </div>
     </div>
   )
-} 
+}

@@ -1,11 +1,27 @@
 import { Suspense } from "react"
 import LeadsContent from "./leads-content"
 
-export default function Page() {
+export default async function Page(props: {
+  searchParams?: Promise<{
+    query?: string
+    page?: string
+    size?: string
+  }>
+}) {
+  const searchParams = await props.searchParams
+  const query = searchParams?.query || ""
+  const currentPage = Number(searchParams?.page) || 1
+  const pageSize = Number(searchParams?.size) || 10
+
   return (
     <div className="space-y-8">
       <Suspense fallback={<Loading />}>
-        <LeadsContent />
+        <LeadsContent
+          status="all"
+          pageSize={pageSize}
+          page={currentPage}
+          search={query}
+        />
       </Suspense>
     </div>
   )
