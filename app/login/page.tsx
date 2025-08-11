@@ -1,44 +1,48 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { supabase } from "@/lib/supabase"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
 
   const handleGoogleSignIn = async () => {
     setIsLoading(true)
     try {
-      console.log('Starting Google sign in...')
-      console.log('Redirect URL:', `${window.location.origin}/auth/callback`)
-      
+      console.log("Starting Google sign in...")
+      console.log("Redirect URL:", `${window.location.origin}/auth/callback`)
+
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
       })
 
-      console.log('OAuth response:', { data, error })
+      console.log("OAuth response:", { data, error })
       if (data?.url) {
-        console.log('OAuth URL:', data.url)
+        console.log("OAuth URL:", data.url)
       }
 
       if (error) {
-        console.error('OAuth error:', error)
+        console.error("OAuth error:", error)
         toast.error(error.message)
       } else {
-        console.log('OAuth successful, redirecting...')
+        console.log("OAuth successful, redirecting...")
         toast.success("Redirecting to Google...")
       }
     } catch (error) {
-      console.error('Sign in error:', error)
+      console.error("Sign in error:", error)
       toast.error("Failed to sign in with Google")
     } finally {
       setIsLoading(false)
@@ -101,21 +105,26 @@ export default function LoginPage() {
               )}
             </Button>
 
-                         <div className="relative">
-               <div className="absolute inset-0 flex items-center">
-                 <span className="w-full border-t" />
-               </div>
-               <div className="relative flex justify-center text-xs uppercase">
-                 <span className="bg-background px-2 text-muted-foreground">Or</span>
-               </div>
-             </div>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or
+                </span>
+              </div>
+            </div>
 
-                         <div className="text-center text-sm">
-               Don't have an account?{" "}
-               <Link href="/signup" className="font-medium text-primary hover:text-primary/80">
-                 Sign up
-               </Link>
-             </div>
+            <div className="text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <Link
+                href="/signup"
+                className="font-medium text-primary hover:text-primary/80"
+              >
+                Sign up
+              </Link>
+            </div>
           </CardContent>
         </Card>
       </div>

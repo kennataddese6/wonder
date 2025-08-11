@@ -6,14 +6,14 @@ import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
-    SidebarGroupLabel,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from "@/components/ui/enhanced-sidebar"
 import Link from "next/link"
 
@@ -44,6 +44,7 @@ export function AppSidebar() {
         router.push("/login")
       }
     } catch (error) {
+      console.error("Sign out error:", error)
       toast.error("Failed to sign out")
     }
   }
@@ -68,7 +69,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
+
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>

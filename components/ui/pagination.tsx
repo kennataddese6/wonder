@@ -1,13 +1,11 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
 
 const Pagination = ({ total }: { total: number }) => {
   const searchParams = useSearchParams()
 
   const pathname = usePathname()
   const { replace } = useRouter()
-  const [page, setPage] = useState(1)
   const pageSize = Number(searchParams.get("size")?.toString()) || 10
   const totalPages = Math.ceil(total / pageSize)
 
