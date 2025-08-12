@@ -38,14 +38,16 @@ export default async function LeadsOverview() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
-                <div className="text-2xl font-bold text-gray-900">{count}</div>
+                <div className="text-2xl font-bold text-gray-900">
+                  {Number(count)}
+                </div>
                 <div
                   className={`px-2 py-1 rounded-full text-xs font-medium ${
                     statusColors[status as keyof typeof statusColors] ||
                     "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  {((count / stats.total) * 100).toFixed(1)}%
+                  {((Number(count) / stats.total) * 100).toFixed(1)}%
                 </div>
               </div>
             </CardContent>

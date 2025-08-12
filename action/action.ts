@@ -156,7 +156,7 @@ export const getLeadStats = async () => {
       .from(leadsTable)
       .groupBy(leadsTable.status)
 
-    const total = totalResult[0]?.count || 0
+    const total = Number(totalResult[0]?.count) || 0
     const statusStats = statusCounts.reduce((acc: any, item: any) => {
       acc[item.status] = Number(item.count)
       return acc
