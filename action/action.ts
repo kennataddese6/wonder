@@ -189,7 +189,7 @@ export const getDailyLeadStats = async () => {
       .orderBy(sql`DATE(${leadsTable.createdAt})`)
 
     return dailyStats.map((stat) => ({
-      date: stat.date,
+      date: stat.date as string,
       leads: Number(stat.count),
     }))
   } catch (error) {
