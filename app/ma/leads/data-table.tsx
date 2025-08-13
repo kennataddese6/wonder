@@ -1,23 +1,23 @@
 "use client"
 
 import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    getFilteredRowModel,
-    getPaginationRowModel,
-    useReactTable,
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
 } from "@tanstack/react-table"
 
 import { deleteLeads } from "@/action/action"
 import { Button } from "@/components/ui/button"
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -52,9 +52,9 @@ export function DataTable<TData, TValue>({
 
     setIsDeleting(true)
     try {
-      const leadIds = selectedRows.map(row => (row.original as Lead).id)
+      const leadIds = selectedRows.map((row) => (row.original as Lead).id)
       const result = await deleteLeads(leadIds)
-      
+
       if (result.errorMessage) {
         toast.error(result.errorMessage)
       } else {
@@ -83,11 +83,13 @@ export function DataTable<TData, TValue>({
             onClick={handleDeleteSelected}
             disabled={isDeleting}
           >
-            {isDeleting ? "Deleting..." : `Delete ${selectedRows.length} lead(s)`}
+            {isDeleting
+              ? "Deleting..."
+              : `Delete ${selectedRows.length} lead(s)`}
           </Button>
         </div>
       )}
-      
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -116,15 +118,29 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <TableCell key={cell.id} className="max-w-xs truncate">
+                      <span
+                        title={
+                          typeof cell.getValue() === "object"
+                            ? JSON.stringify(cell.getValue()) // stringify objects
+                            : String(cell.getValue())
+                        }
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </span>
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
