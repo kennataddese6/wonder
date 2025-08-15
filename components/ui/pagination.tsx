@@ -34,7 +34,7 @@ const Pagination = ({ total }: { total: number }) => {
             )
           }
           disabled={Number(searchParams.get("page")?.toString()) === 1}
-          className="border rounded px-2 py-1 text-sm disabled:opacity-50"
+          className="border rounded px-2 py-1 text-sm disabled:opacity-50 cursor-pointer"
         >
           Previous
         </button>
@@ -50,7 +50,7 @@ const Pagination = ({ total }: { total: number }) => {
             Number(searchParams.get("page")?.toString()) === totalPages ||
             totalPages === 0
           }
-          className="border rounded px-2 py-1 text-sm disabled:opacity-50"
+          className="border rounded px-2 py-1 text-sm disabled:opacity-50 cursor-pointer"
         >
           Next
         </button>
