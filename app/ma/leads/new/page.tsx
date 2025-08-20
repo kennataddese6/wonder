@@ -1,10 +1,7 @@
-"use cache"
-import { unstable_cacheLife as cacheLife } from "next/cache"
 import { Suspense } from "react"
 import LeadsContent from "../leads-content"
 
 export default function NewLeadsPage() {
-  cacheLife("minutes")
   return (
     <Suspense fallback={<Loading />}>
       <LeadsContent status="New" />
