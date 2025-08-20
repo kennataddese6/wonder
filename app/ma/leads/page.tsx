@@ -1,3 +1,4 @@
+import { headers } from "next/headers"
 import { Suspense } from "react"
 import LeadsContent from "./leads-content"
 export default async function Page(props: {
@@ -7,6 +8,7 @@ export default async function Page(props: {
     size?: string
   }>
 }) {
+  await headers()
   const searchParams = await props.searchParams
   const query = searchParams?.query || ""
   const currentPage = Number(searchParams?.page) || 1
