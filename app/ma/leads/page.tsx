@@ -1,5 +1,3 @@
-"use cache"
-import { unstable_cacheLife as cacheLife } from "next/cache"
 import { Suspense } from "react"
 import LeadsContent from "./leads-content"
 export default async function Page(props: {
@@ -9,7 +7,6 @@ export default async function Page(props: {
     size?: string
   }>
 }) {
-  cacheLife("minutes")
   const searchParams = await props.searchParams
   const query = searchParams?.query || ""
   const currentPage = Number(searchParams?.page) || 1
